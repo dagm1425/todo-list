@@ -109,6 +109,45 @@ class displayController {
         if(addTaskDivExp.classList.contains('add-active')) addTaskDivExp.classList.remove('add-active');
     }
 
+    static getModalFields() {
+        var modalTitle = document.getElementById('title');
+        var modalDescription = document.getElementById('description');
+        var dueDate = document.getElementById('dueDate');
+        var modalSelectedProject = document.getElementById('project');
+        var modalProject = modalSelectedProject.options[modalSelectedProject.selectedIndex];
+        var modalSelectedPriority = document.getElementById('priority');
+        var modalPriority = modalSelectedPriority.options[modalSelectedPriority.selectedIndex];
+        var modalId = document.getElementById('modalId');
+
+        return [modalTitle,
+                modalDescription,
+                dueDate,
+                modalPriority,
+                modalProject,
+                modalId,
+                ]
+    }
+
+    static populateModal(index) {
+        const modalFields = displayController.getModalFields();
+
+        modalFields[0].value = taskItems[index].title;
+        modalFields[1].value = taskItems[index].description;
+        modalFields[2].value = taskItems[index].dueDate;
+        modalFields[3].text = taskItems[index].priority;
+        modalFields[4].text = taskItems[index].project;
+        modalFields[5].value = index;
+    }
+
+    static updateTaskInUI(index) {
+        const task = document.getElementById(`${index}`); 
+
+        task.children[0].innerText = taskItems[index].title;
+        task.children[1].innerText = taskItems[index].description;
+        task.children[2].firstElementChild.innerText = taskItems[index].dueDate;
+        task.children[2].lastElementChild.innerText = taskItems[index].priority;
+    }
+
     static openModal(modal) {
       if(modal == null) return;
       modal.classList.add('active');
@@ -134,6 +173,28 @@ class displayController {
         project.selectedIndex = 0;
         priority.selectedIndex = 0;
     }
+
+    static clearModalFields() {
+        const modalFields = displayController.getModalFields();
+        const project = document.getElementById('project');
+        const priority = document.getElementById('priority');
+        
+        modalFields[0].value = '';
+        modalFields[1].value = '';
+        modalFields[2].value = '';
+        project.selectedIndex = 0;
+        priority.selectedIndex = 0;
+      }
+}
+
+function updateTaskInStore(index) {
+    const modalFields = displayController.getModalFields();
+
+    taskItems[index].title = modalFields[0].value; 
+    taskItems[index].description = modalFields[1].value;
+    taskItems[index].dueDate = modalFields[2].value;
+    taskItems[index].priority = modalFields[3].text;
+    taskItems[index].project = modalFields[4].text;
 }
 
 window.addEventListener('load', () => {
@@ -165,3 +226,35 @@ document.getElementById('save').addEventListener('click', () => {
 })
 
 
+document.getElementById('project-content').addEventListener('click', (e) => {
+    const modal = document.getElementById('todo-modal');
+    const i = e.target.parentElement.id;
+  
+    if(e.target.classList.contains('task-title') || e.target.classList.contains('task-description')) {
+      displayController.populateModal(i); 
+      displayController.openModal(modal);
+      console.log(taskItems)
+
+    }
+})
+
+document.getElementById('saveModal').addEventListener('click', e => {
+    const modal = document.querySelector('#todo-modal');
+    const index = modal.querySelector('#modalId').value;
+
+    updateTaskInStore(index);
+    displayController.updateTaskInUI(index);
+    displayController.closeModal(modal);
+    console.log(taskItems)
+})
+
+document.getElementsByClassName('btn close')[0].addEventListener('click', (event) => {
+    event.preventDefault();
+    const modal = document.querySelector('#todo-modal.active'); 
+    displayController.closeModal(modal);
+})
+
+document.getElementById('overlay').addEventListener('click', () => {
+    const modal = document.querySelector('#todo-modal.active'); 
+    displayController.closeModal(modal);
+})
