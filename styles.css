@@ -166,3 +166,113 @@ body {
 .btn:hover {
   filter: brightness(0.9);
 }
+
+#todo-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-out;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  z-index: 10;
+  width: 42%;
+}
+
+#todo-modal.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 1.125rem;
+  padding: 0 8px;
+  border-bottom: 0.25px solid rgba(0, 0, 0, 0.3);
+}
+
+.close {
+  background: none;
+}
+
+.modal-body {
+    display: flex;
+}
+
+.text-input {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    width: 75%;
+}
+
+.task-title-modal {
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: 0.25px solid rgba(0, 0, 0, 0.3);
+}
+
+.task-description-modal {
+  vertical-align: middle;
+}
+
+.task-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #636c72;
+    padding: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.04);
+    width: 25%;
+}
+
+.settings {
+    border-bottom: 0.25px solid rgba(0, 0, 0, 0.3);
+    margin: 8px 0;
+}
+
+.settings > label {
+    font-weight: 600;
+    margin: 8px 0 4px;
+}
+
+.settings > select {
+    font-size: 14px;
+}
+
+.display-none {
+  display: none;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-footer button {
+    margin-left: 8px;
+}
+
+#overlay {
+  position: fixed;
+  opacity: 0;
+  transition: 150ms ease-out;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
