@@ -56,5 +56,50 @@
     <section id="side-bar">
         <h1>Projects</h1>
     </section>
+    
+    <div id="todo-modal">
+        <div class="modal-header">
+            <div class="title">Edit task</div>
+            <button class="btn close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="text-input">
+                <input type="text" id="title" name="title" class="input-fields task-title-modal" placeholder="Title"><br>
+                <textarea id="description" name="description" class="input-fields task-description-modal" placeholder="Description" rows="8"></textarea><br>
+            </div>
+            <div class="task-settings">
+                <div class="settings">
+                    <label for="dueDate">Due date</label>
+                    <input type="date" id="dueDate" name="dueDate" class="input-fields">
+                </div> 
+                <div class="settings">
+                    <label for="priority">Priority</label>
+                    <select name="priority" id="priority" class="input-fields">
+                        <option hidden disabled selected value> - Select - </option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">low</option>                   
+                    </select>
+                </div>
+                <div class="settings">
+                    <label for="project">Project</label>
+                    <select name="project" id="project" class="input-fields">
+                        <option hidden disabled selected value> - Select - </option>
+                        <option value="office">Office</option>
+                        <option value="groceries">Groceries</option>
+                    </select>
+                </div>
+                <div class="settings">
+                    <input type="text" id="modalId" class="display-none">
+                </div>       
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="saveModal" class="btn save">Save</button>
+            <button class="btn complete">Complete</button>
+            <button class="btn delete">Delete</button>
+        </div>
+    </div>   
+    <div id="overlay"></div>
 </body>
 </html>
