@@ -70,19 +70,17 @@ class displayController {
         const taskInfo = document.createElement('div');
         taskInfo.classList.add('task-info', 'task-body');
 
-        const taskDueDate = document.createElement('div');
-        taskDueDate.innerText = `${taskItem.dueDate}`;
+        const taskDueDate = document.createElement('input');
+        taskDueDate.type = "date";
+        taskDueDate.name = "duedate";
+        taskDueDate.value = `${taskItem.dueDate}`;
+        taskDueDate.id = "date";
+        taskDueDate.classList.add('input-fields');
         taskInfo.appendChild(taskDueDate);
 
-        // const taskDueDate = document.createElement('input');
-        // taskDueDate.type = "date";
-        // taskDueDate.name = "name";
-        // taskDueDate.value = "value";
-        // taskDueDate.id = "id";
-
-        const taskPriority = document.createElement('div');
-        taskPriority.innerText = `${taskItem.priority}`;
-        taskInfo.appendChild(taskPriority);
+        // const taskPriority = document.createElement('div');
+        // taskPriority.innerText = `${taskItem.priority}`;
+        // taskInfo.appendChild(taskPriority);
 
         taskContent.appendChild(taskInfo);
         taskContainer.appendChild(taskContent);
@@ -259,16 +257,27 @@ document.getElementById('overlay').addEventListener('click', () => {
 })
 
 document.getElementById('project-content').addEventListener('change', e => {
-    const index = e.target.parentElement.nextElementSibling.id;
-    const task = e.target.parentElement.parentElement;
-
-    if(e.target.checked) {
-        task.classList.add('checked');
-        taskItems[index].check = 'checked';
+    if(e.target.name === 'check') {
+        const index = e.target.parentElement.nextElementSibling.id;
+        const task = e.target.parentElement.parentElement;
+    
+        if(e.target.checked) {
+            task.classList.add('checked');
+            taskItems[index].check = 'checked';
+        }
+        else if(task.classList.contains('checked')) {
+            task.classList.remove('checked');
+            taskItems[index].check = 'not checked';
+        }
     }
-    else if(task.classList.contains('checked')) {
-        task.classList.remove('checked');
-        taskItems[index].check = 'not checked';
+})
+
+document.getElementById('project-content').addEventListener('input', e => {
+    if(e.target.name === 'duedate') {
+        const index = e.target.parentElement.parentElement.id;
+
+        taskItems[index].dueDate = e.target.value;
+        console.log(taskItems[index].dueDate)
     }
 })
 
