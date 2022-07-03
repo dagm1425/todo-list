@@ -57,16 +57,20 @@ class displayController {
         taskContent.classList.add('task-content');
         taskContent.setAttribute('id', `${taskItems.length - 1}`);
 
+        const taskMain = document.createElement('div');
+
         const taskTitle = document.createElement('div');
         taskTitle.classList.add('task-title');
         taskTitle.innerText = `${taskItem.title}`;
-        taskContent.appendChild(taskTitle);
+        taskMain.appendChild(taskTitle);
 
         const taskDescription = document.createElement('div');
         taskDescription.classList.add('task-description', 'task-body');
         taskDescription.innerText = `${taskItem.description}`;
-        taskContent.appendChild(taskDescription);
+        taskMain.appendChild(taskDescription);
 
+        taskContent.appendChild(taskMain);
+        
         const taskInfo = document.createElement('div');
         taskInfo.classList.add('task-info', 'task-body');
 
