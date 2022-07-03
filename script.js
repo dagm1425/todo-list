@@ -1,12 +1,13 @@
 const taskItems = [];
 
 class task {
-    constructor(title, description, dueDate, priority, project) {
+    constructor(title, description, dueDate, priority, project, check) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.project = project;      
+        this.project = project; 
+        this.check = check;     
     } 
 }
 
@@ -45,7 +46,7 @@ class displayController {
         check.classList.add('task-checkbox');
         var checkbox = document.createElement('input');
         checkbox.type = "checkbox";
-        checkbox.name = "name";
+        checkbox.name = "check";
         checkbox.value = "value";
         checkbox.id = "id";
         check.appendChild(checkbox);
@@ -218,8 +219,9 @@ document.getElementById('save').addEventListener('click', () => {
     const priority = selectedPriority.options[selectedPriority.selectedIndex].text;
     const selectedProject = document.getElementById('project-exp');
     const project = selectedProject.options[selectedProject.selectedIndex].text;
+    const check = '';
 
-    const newTask = new task(title, description, dueDate, priority, project);
+    const newTask = new task(title, description, dueDate, priority, project, check);
     taskItems.push(newTask);
     displayController. clearAddTaskFields();
     displayController.addTaskToList(newTask);
@@ -233,8 +235,6 @@ document.getElementById('project-content').addEventListener('click', (e) => {
     if(e.target.classList.contains('task-title') || e.target.classList.contains('task-description')) {
       displayController.populateModal(i); 
       displayController.openModal(modal);
-      console.log(taskItems)
-
     }
 })
 
@@ -245,7 +245,6 @@ document.getElementById('saveModal').addEventListener('click', e => {
     updateTaskInStore(index);
     displayController.updateTaskInUI(index);
     displayController.closeModal(modal);
-    console.log(taskItems)
 })
 
 document.getElementsByClassName('btn close')[0].addEventListener('click', (event) => {
@@ -258,3 +257,18 @@ document.getElementById('overlay').addEventListener('click', () => {
     const modal = document.querySelector('#todo-modal.active'); 
     displayController.closeModal(modal);
 })
+
+document.getElementById('project-content').addEventListener('change', e => {
+    const index = e.target.parentElement.nextElementSibling.id;
+    const task = e.target.parentElement.parentElement;
+
+    if(e.target.checked) {
+        task.classList.add('checked');
+        taskItems[index].check = 'checked';
+    }
+    else if(task.classList.contains('checked')) {
+        task.classList.remove('checked');
+        taskItems[index].check = 'not checked';
+    }
+})
+
