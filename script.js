@@ -82,6 +82,15 @@ class displayController {
         taskDueDate.classList.add('input-fields');
         taskInfo.appendChild(taskDueDate);
 
+        const editBtn = document.createElement('button');
+        editBtn.classList.add('edit-btn');
+        editBtn.innerText = 'Edit';
+        taskInfo.appendChild(editBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.innerText = 'Delete';
+        taskInfo.appendChild(deleteBtn);
         // const taskPriority = document.createElement('div');
         // taskPriority.innerText = `${taskItem.priority}`;
         // taskInfo.appendChild(taskPriority);
@@ -154,9 +163,9 @@ class displayController {
     static updateTaskInUI(index) {
         const task = document.getElementById(`${index}`); 
 
-        task.children[0].innerText = taskItems[index].title;
-        task.children[1].innerText = taskItems[index].description;
-        task.children[2].firstElementChild.innerText = taskItems[index].dueDate;
+        task.firstElementChild.firstElementChild.innerText = taskItems[index].title;
+        task.firstElementChild.lastElementChild.innerText = taskItems[index].description;
+        task.lastElementChild.children[0].value = taskItems[index].dueDate;
         displayController.colorPriority(`${taskItems[index].priority}`, index);        
     }
 
@@ -209,6 +218,10 @@ function updateTaskInStore(index) {
     taskItems[index].project = modalFields[4].text;
 }
 
+function removeTaskFromStore(index) {
+    taskItems.splice(index, 1);
+}
+
 window.addEventListener('load', () => {
     displayController.loadProject();
     displayController.dispAddTask();
@@ -240,12 +253,21 @@ document.getElementById('save').addEventListener('click', () => {
 
 
 document.getElementById('project-content').addEventListener('click', (e) => {
-    const modal = document.getElementById('todo-modal');
-    const i = e.target.parentElement.id;
-  
-    if(e.target.classList.contains('task-title') || e.target.classList.contains('task-description')) {
-      displayController.populateModal(i); 
-      displayController.openModal(modal);
+    if(e.target.classList.contains('edit-btn')) {
+        const modal = document.getElementById('todo-modal');
+        const i = e.target.parentElement.parentElement.id;
+      
+        displayController.populateModal(i); 
+        displayController.openModal(modal);
+    }
+})
+
+document.getElementById('project-content').addEventListener('click', e => {
+    if(e.target.classList.contains('delete-btn')) {
+        const index = e.target.parentElement.parentElement.id;
+        removeTaskFromStore(index);
+        e.target.parentElement.parentElement.parentElement.remove();
+        console.log(taskItems)
     }
 })
 
