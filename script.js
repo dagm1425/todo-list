@@ -89,7 +89,16 @@ class displayController {
         li.appendChild(taskContainer);
 
         ul.insertBefore(li, ul.firstElementChild);
-        
+        displayController.colorPriority(`${taskItem.priority}`, taskContent.id);        
+
+    }
+
+    static colorPriority(priority, id) {
+        const check = document.getElementById(`${id}`).previousElementSibling.firstElementChild;
+
+        if(priority === 'High') check.classList.add('high');
+        else if(priority === 'Medium') check.classList.add('medium');
+        else if(priority === 'Low') check.classList.add('low');
     }
 
     static dispAddTaskExp() { // edit css; display none and flex interfere check with 'Inspect'
@@ -144,7 +153,7 @@ class displayController {
         task.children[0].innerText = taskItems[index].title;
         task.children[1].innerText = taskItems[index].description;
         task.children[2].firstElementChild.innerText = taskItems[index].dueDate;
-        task.children[2].lastElementChild.innerText = taskItems[index].priority;
+        displayController.colorPriority(`${taskItems[index].priority}`, index);        
     }
 
     static openModal(modal) {
@@ -275,9 +284,7 @@ document.getElementById('project-content').addEventListener('change', e => {
 document.getElementById('project-content').addEventListener('input', e => {
     if(e.target.name === 'duedate') {
         const index = e.target.parentElement.parentElement.id;
-
         taskItems[index].dueDate = e.target.value;
-        console.log(taskItems[index].dueDate)
     }
 })
 
