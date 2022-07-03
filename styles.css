@@ -276,3 +276,17 @@ body {
   opacity: 1;
   pointer-events: all;
 }
+
+.checked { 
+  position: relative;
+  filter: brightness(0.8);
+}
+
+div.checked:before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-bottom: 1px solid #111;
+  width: 100%;
+}
