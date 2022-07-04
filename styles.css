@@ -22,13 +22,14 @@ body {
 }
 
 #main {
-  width: 75%;
+  width: 85%;
+  float: right;
   margin: auto;
 }
 
 #side-bar {
   width: 15%;
-  /* padding: 1rem; */
+  padding: 2rem;
   background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -119,7 +120,7 @@ body {
   margin: 0.75rem 0 0 0.75rem;
 }
 
-.tasks-view ul {
+ul {
   list-style-type: none;
 }
 
@@ -135,7 +136,6 @@ body {
   width: 100%;
   margin-left: 12px;
   line-height: 1.2;
-  cursor: pointer; 
 }
 
 .task-body {
@@ -145,7 +145,7 @@ body {
 
 .task-info {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .task-info div {
@@ -331,3 +331,48 @@ input[type='checkbox']:checked:after {
 .input[type='checkbox']:hover:after{
   border-color: #d4de4e;
 } */
+
+.add-project {
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  border-top: 0.25px solid rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+.add-project a {
+  text-decoration: none;
+  color: inherit;
+} 
+
+.add-project a:hover {
+  color: lightsalmon;
+}
+
+.add-project span {
+ margin-right: 8px;
+ height: 12px;
+ width: 12px;
+ border-radius: 50%;
+ transition: 150ms;
+} 
+
+.add-project span:hover {
+  color: #fff;
+  background-color: lightsalmon;
+}
+
+.add-project-exp {
+  display: none;
+}
+
+.add-project-exp.add-active {
+  display: block;
+}
+
+.add-project.add-active {
+  display: block;
+}
+
+.project-list {
+  cursor: pointer;
+}
