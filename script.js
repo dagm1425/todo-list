@@ -1,4 +1,5 @@
-const taskItems = [];
+const taskItems = [];     
+const projectList = [];
 
 class task {
     constructor(title, description, dueDate, priority, project, check) {
@@ -44,11 +45,11 @@ class displayController {
 
         const check = document.createElement('div');
         check.classList.add('task-checkbox');
-        var checkbox = document.createElement('input');
-        checkbox.type = "checkbox";
-        checkbox.name = "check";
-        checkbox.value = "value";
-        checkbox.id = "id";
+        const checkbox = document.createElement('input');
+            checkbox.type = "checkbox";
+            checkbox.name = "check";
+            checkbox.value = "value";
+            checkbox.id = "id";
         check.appendChild(checkbox);
 
         taskContainer.appendChild(check);
@@ -115,19 +116,35 @@ class displayController {
     }
 
     static dispAddTaskExp() { // edit css; display none and flex interfere check with 'Inspect'
-        const addTaskDiv = document.querySelector('.add-task');
-        const addTaskDivExp = document.querySelector('.add-task-exp')
+        const addTask = document.querySelector('.add-task');
+        const addTaskExp = document.querySelector('.add-task-exp')
 
-        addTaskDivExp.classList.add('add-active');
-        if(addTaskDiv.classList.contains('add-active')) addTaskDiv.classList.remove('add-active');
+        addTaskExp.classList.add('add-active');
+        if(addTask.classList.contains('add-active')) addTask.classList.remove('add-active');
     }
 
     static dispAddTask() {
-        const addTaskDiv = document.querySelector('.add-task');
-        const addTaskDivExp = document.querySelector('.add-task-exp')
+        const addTask = document.querySelector('.add-task');
+        const addTaskExp = document.querySelector('.add-task-exp');
 
-        addTaskDiv.classList.add('add-active');
-        if(addTaskDivExp.classList.contains('add-active')) addTaskDivExp.classList.remove('add-active');
+        addTask.classList.add('add-active');
+        if(addTaskExp.classList.contains('add-active')) addTaskExp.classList.remove('add-active');
+    }
+
+    static dispAddProject() {
+        const addProject = document.querySelector('.add-project');
+        const addProjectExp = document.querySelector('.add-project-exp');
+
+        addProject.classList.add('add-active');
+        if(addProjectExp.classList.contains('add-active')) addProjectExp.classList.remove('add-active');
+    }
+
+    static dispAddProjectExp() { 
+        const addProject = document.querySelector('.add-project');
+        const addProjectExp = document.querySelector('.add-project-exp');
+
+        addProjectExp.classList.add('add-active');
+        if(addProject.classList.contains('add-active')) addProject.classList.remove('add-active');
     }
 
     static getModalFields() {
@@ -206,6 +223,29 @@ class displayController {
         project.selectedIndex = 0;
         priority.selectedIndex = 0;
       }
+
+      static addProjectToList(projectName) {
+        const list = document.querySelector('.project-list');
+        const project = document.createElement('li');
+        
+        project.setAttribute('id', `${projectList.length - 1}`);
+        project.innerText = `${projectName}`;
+        list.appendChild(project);
+      }
+
+      static clearProjectField() {
+        document.getElementById('projectName').value = '';
+      }
+
+      static addProjectToOption(project) {
+        const addSelect = document.getElementById('project-exp');
+        const modalSelect = document.getElementById('project');
+        const option = document.createElement('option');
+
+        option.text = project;
+        addSelect.add(option);
+        modalSelect.add(option);
+      }
 }
 
 function updateTaskInStore(index) {
@@ -225,6 +265,7 @@ function removeTaskFromStore(index) {
 window.addEventListener('load', () => {
     displayController.loadProject();
     displayController.dispAddTask();
+    displayController.dispAddProject();
 })
 
 document.querySelector('.add-task').addEventListener('click', () => {
@@ -232,7 +273,24 @@ document.querySelector('.add-task').addEventListener('click', () => {
 })
 
 document.querySelector('.btn-container-exp').addEventListener('click', () => {
+    displayController. clearAddTaskFields();
     displayController.dispAddTask();
+})
+
+document.querySelector('.add-project').addEventListener('click', () => {
+    displayController.dispAddProjectExp()
+})
+
+document.querySelector('.project-btn-container').addEventListener('click', () => {
+    displayController.dispAddProject();
+    displayController.clearProjectField();
+})
+
+document.getElementById('saveProject').addEventListener('click', () => { 
+    const projectName = document.getElementById('projectName').value;
+    projectList.push(projectName);
+    displayController.addProjectToList(projectName);
+    displayController.addProjectToOption(projectName);
 })
 
 document.getElementById('save').addEventListener('click', () => {
@@ -267,7 +325,6 @@ document.getElementById('project-content').addEventListener('click', e => {
         const index = e.target.parentElement.parentElement.id;
         removeTaskFromStore(index);
         e.target.parentElement.parentElement.parentElement.remove();
-        console.log(taskItems)
     }
 })
 
