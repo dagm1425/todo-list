@@ -151,16 +151,18 @@ class displayController {
         var modalTitle = document.getElementById('title');
         var modalDescription = document.getElementById('description');
         var dueDate = document.getElementById('dueDate');
-        var modalSelectedProject = document.getElementById('project');
-        var modalProject = modalSelectedProject.options[modalSelectedProject.selectedIndex];
         var modalSelectedPriority = document.getElementById('priority');
         var modalPriority = modalSelectedPriority.options[modalSelectedPriority.selectedIndex];
+        var modalSelectedProject = document.getElementById('project');
+        var modalProject = modalSelectedProject.options[modalSelectedProject.selectedIndex];
         var modalId = document.getElementById('modalId');
 
         return [modalTitle,
                 modalDescription,
                 dueDate,
+                modalSelectedPriority,
                 modalPriority,
+                modalSelectedProject,
                 modalProject,
                 modalId,
                 ]
@@ -172,9 +174,9 @@ class displayController {
         modalFields[0].value = taskItems[index].title;
         modalFields[1].value = taskItems[index].description;
         modalFields[2].value = taskItems[index].dueDate;
-        modalFields[3].text = taskItems[index].priority;
-        modalFields[4].text = taskItems[index].project;
-        modalFields[5].value = index;
+        modalFields[3].value = taskItems[index].priority;
+        modalFields[5].value = taskItems[index].project;
+        modalFields[7].value = index;
     }
 
     static updateTaskInUI(index) {
@@ -203,7 +205,7 @@ class displayController {
         const description = document.getElementById('description-exp');
         const dueDate = document.getElementById('dueDate-exp');
         const priority = document.getElementById('priority-exp');
-        const project = document.getElementById('priority-exp');
+        const project = document.getElementById('project-exp');
 
         title.value = '';
         description.value = '';
@@ -240,11 +242,16 @@ class displayController {
       static addProjectToOption(project) {
         const addSelect = document.getElementById('project-exp');
         const modalSelect = document.getElementById('project');
-        const option = document.createElement('option');
+        const opt1 = document.createElement('option');
+        const opt2 = document.createElement('option');
 
-        option.text = project;
-        addSelect.add(option);
-        modalSelect.add(option);
+        opt1.text = project;
+        opt1.value = project;
+        opt2.text = project;
+        opt2.value = project;
+
+        addSelect.add(opt1);
+        modalSelect.add(opt2);
       }
 }
 
@@ -254,8 +261,8 @@ function updateTaskInStore(index) {
     taskItems[index].title = modalFields[0].value; 
     taskItems[index].description = modalFields[1].value;
     taskItems[index].dueDate = modalFields[2].value;
-    taskItems[index].priority = modalFields[3].text;
-    taskItems[index].project = modalFields[4].text;
+    taskItems[index].priority = modalFields[3].value;
+    taskItems[index].project = modalFields[5].value;
 }
 
 function removeTaskFromStore(index) {
@@ -273,7 +280,7 @@ document.querySelector('.add-task').addEventListener('click', () => {
 })
 
 document.querySelector('.btn-container-exp').addEventListener('click', () => {
-    displayController. clearAddTaskFields();
+    displayController.clearAddTaskFields();
     displayController.dispAddTask();
 })
 
@@ -298,9 +305,9 @@ document.getElementById('save').addEventListener('click', () => {
     const description = document.getElementById('description-exp').value;
     const dueDate = document.getElementById('dueDate-exp').value;
     const selectedPriority = document.getElementById('priority-exp');
-    const priority = selectedPriority.options[selectedPriority.selectedIndex].text;
+    const priority = selectedPriority.options[selectedPriority.selectedIndex].value;
     const selectedProject = document.getElementById('project-exp');
-    const project = selectedProject.options[selectedProject.selectedIndex].text;
+    const project = selectedProject.options[selectedProject.selectedIndex].value;
     const check = '';
 
     const newTask = new task(title, description, dueDate, priority, project, check);
