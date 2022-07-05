@@ -13,16 +13,16 @@ class task {
 }
 
 class displayController {
-    static loadProject() {
-        const projectContent = document.getElementById('project-content')
+    static loadProject(projectName) {
+        const projectContent = document.getElementById('project-content');
 
         const projectView = document.createElement('div');
         projectView.classList.add('project-view');
 
-        // const projectHeader = document.createElement('div');
-        // projectHeader.classList.add('project-header');
-        // projectHeader.innerText = 'Test project';
-        // projectView.appendChild(projectHeader);
+        const projectHeader = document.createElement('div');
+        projectHeader.classList.add('project-header');
+        projectHeader.innerText = `${projectName}`;
+        projectView.appendChild(projectHeader);
 
         const tasksView = document.createElement('div');
         tasksView.classList.add('tasks-view');
@@ -226,33 +226,38 @@ class displayController {
         priority.selectedIndex = 0;
       }
 
-      static addProjectToList(projectName) {
-        const list = document.querySelector('.project-list');
-        const project = document.createElement('li');
-        
-        project.setAttribute('id', `${projectList.length - 1}`);
-        project.innerText = `${projectName}`;
-        list.appendChild(project);
-      }
+    static addProjectToList(projectName) {
+    const list = document.querySelector('.project-list');
+    const project = document.createElement('li');
+    
+    project.setAttribute('id', `${projectList.length - 1}`);
+    project.innerText = `${projectName}`;
+    list.appendChild(project);
+    }
 
-      static clearProjectField() {
-        document.getElementById('projectName').value = '';
-      }
+    static clearProjectField() {
+    document.getElementById('projectName').value = '';
+    }
 
-      static addProjectToOption(project) {
-        const addSelect = document.getElementById('project-exp');
-        const modalSelect = document.getElementById('project');
-        const opt1 = document.createElement('option');
-        const opt2 = document.createElement('option');
+    static addProjectToOption(project) {
+    const addSelect = document.getElementById('project-exp');
+    const modalSelect = document.getElementById('project');
+    const opt1 = document.createElement('option');
+    const opt2 = document.createElement('option');
 
-        opt1.text = project;
-        opt1.value = project;
-        opt2.text = project;
-        opt2.value = project;
+    opt1.text = project;
+    opt1.value = project;
+    opt2.text = project;
+    opt2.value = project;
 
-        addSelect.add(opt1);
-        modalSelect.add(opt2);
-      }
+    addSelect.add(opt1);
+    modalSelect.add(opt2);
+    }
+
+    static dispNewProject(projectName) {
+        document.querySelector('.project-view').remove();
+        displayController.loadProject(projectName)
+    }
 }
 
 function updateTaskInStore(index) {
@@ -376,5 +381,9 @@ document.getElementById('project-content').addEventListener('input', e => {
         const index = e.target.parentElement.parentElement.id;
         taskItems[index].dueDate = e.target.value;
     }
+})
+
+document.querySelector('.project-list').addEventListener('click', e => {
+    displayController.dispNewProject(e.target.innerText);
 })
 
