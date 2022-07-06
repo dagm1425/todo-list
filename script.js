@@ -277,6 +277,11 @@ class displayController {
             }
         })
     }
+
+    static loadProjectAndTasks(projectName, taskList) {
+        displayController.loadProject(projectName);
+        displayController.displayProjectTasks(projectName, taskList)
+    }
 }
 
 function updateTaskInStore(index) {
@@ -297,6 +302,7 @@ window.addEventListener('load', () => {
     displayController.loadProject();
     displayController.dispAddTask();
     displayController.dispAddProject();
+    displayController.loadProjectAndTasks();
 })
 
 document.querySelector('.add-task').addEventListener('click', () => {
@@ -330,10 +336,8 @@ document.getElementById('save').addEventListener('click', () => {
     const title = document.getElementById('title-exp').value;
     const description = document.getElementById('description-exp').value;
     const dueDate = document.getElementById('dueDate-exp').value;
-    const selectedPriority = document.getElementById('priority-exp');
-    const priority = selectedPriority.options[selectedPriority.selectedIndex].value;
-    const selectedProject = document.getElementById('project-exp');
-    const project = selectedProject.options[selectedProject.selectedIndex].value;
+    const priority = document.getElementById('priority-exp').value;
+    const project = document.getElementById('project-exp').value;
     const check = '';
     const addSelect = document.getElementById('project-exp');
     const projectName = document.querySelector('.project-header').innerText;
@@ -349,6 +353,8 @@ document.getElementById('save').addEventListener('click', () => {
         displayController.dispNewProject(projectName)
         displayController.displayProjectTasks(projectName, taskItems)
     }
+    console.log(taskItems)
+
 })
 
 document.getElementById('project-content').addEventListener('click', (e) => {
