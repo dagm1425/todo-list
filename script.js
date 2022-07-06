@@ -335,14 +335,20 @@ document.getElementById('save').addEventListener('click', () => {
     const selectedProject = document.getElementById('project-exp');
     const project = selectedProject.options[selectedProject.selectedIndex].value;
     const check = '';
+    const addSelect = document.getElementById('project-exp');
+    const projectName = document.querySelector('.project-header').innerText;
 
     const newTask = new task(title, description, dueDate, priority, project, check);
     taskItems.push(newTask);
     displayController.addTaskToList(newTask);
     displayController.setTaskId(taskItems.length - 1);
     displayController.clearAddTaskFields();
-    // displayController.colorPriority(priority, setTaskId());        
+    // displayController.colorPriority(priority, setTaskId());  
 
+    if(addSelect.value !== projectName.toLowerCase()) {
+        displayController.dispNewProject(projectName)
+        displayController.displayProjectTasks(projectName, taskItems)
+    }
 })
 
 document.getElementById('project-content').addEventListener('click', (e) => {
@@ -366,10 +372,17 @@ document.getElementById('project-content').addEventListener('click', e => {
 document.getElementById('saveModal').addEventListener('click', e => {
     const modal = document.querySelector('#todo-modal');
     const index = modal.querySelector('#modalId').value;
+    const modalSelect = document.getElementById('project');
+    const projectName = document.querySelector('.project-header').innerText;
 
     updateTaskInStore(index);
     displayController.updateTaskInUI(index);
     displayController.closeModal(modal);
+
+    if(modalSelect.value !== projectName.toLowerCase()) {
+        displayController.dispNewProject(projectName)
+        displayController.displayProjectTasks(projectName, taskItems)
+    }
 })
 
 document.getElementsByClassName('btn close')[0].addEventListener('click', (event) => {
