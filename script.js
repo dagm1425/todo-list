@@ -358,6 +358,12 @@ class store {
         localStorage.setItem('taskItems', JSON.stringify(taskItems));
     }
 
+    static updateDueDate(index, date) {
+        const taskItems = store.getTasks();
+
+        taskItems[index].dueDate = date;
+        localStorage.setItem('taskItems', JSON.stringify(taskItems));
+    }
 }
 
 window.addEventListener('load', () => {
@@ -489,9 +495,8 @@ document.getElementById('project-content').addEventListener('change', e => {
 
 document.getElementById('project-content').addEventListener('input', e => {
     if(e.target.name === 'duedate') {
-        const taskItems = store.getTasks();
         const index = e.target.parentElement.parentElement.id;
-        taskItems[index].dueDate = e.target.value;
+        store.updateDueDate(index, e.target.value);
     }
 })
 
