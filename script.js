@@ -1,6 +1,3 @@
-const taskItems = [];     
-const projectList = [];
-
 class task {
     constructor(title, description, dueDate, priority, project, check) {
         this.title = title;
@@ -173,6 +170,7 @@ class displayController {
 
     static populateModal(index) {
         const modalFields = displayController.getModalFields();
+        const taskItems = store.getTasks();
 
         modalFields[0].value = taskItems[index].title;
         modalFields[1].value = taskItems[index].description;
@@ -184,6 +182,7 @@ class displayController {
 
     static updateTaskInUI(index) {
         const task = document.getElementById(`${index}`); 
+        const taskItems = store.getTasks();
 
         task.firstElementChild.firstElementChild.innerText = taskItems[index].title;
         task.firstElementChild.lastElementChild.innerText = taskItems[index].description;
@@ -233,28 +232,37 @@ class displayController {
         const list = document.querySelector('.project-list');
         const project = document.createElement('li');
         
-        project.setAttribute('id', `${projectList.length - 1}`);
         project.innerText = `${projectName}`;
         list.appendChild(project);
+    }
+
+    static setProjectId(i) {
+        document.querySelector('.project-list').lastElementChild.setAttribute('id', i);
     }
 
     static clearProjectField() {
         document.getElementById('projectName').value = '';
     }
 
-    static addProjectToOption(project) {
+    static addProjectToOption(projectName) {
         const addSelect = document.getElementById('project-exp');
         const modalSelect = document.getElementById('project');
         const opt1 = document.createElement('option');
         const opt2 = document.createElement('option');
 
-        opt1.text = project;
-        opt1.value = project.toLowerCase();
-        opt2.text = project;
-        opt2.value = project.toLowerCase();
+        opt1.text = projectName;
+        opt1.value = projectName.toLowerCase();
+        opt2.text = projectName;
+        opt2.value = projectName.toLowerCase();
 
         addSelect.add(opt1);
         modalSelect.add(opt2);
+    }
+
+    static addAllProjectsToOption(projectList) {
+        projectList.forEach(project => {
+            displayController.addProjectToOption(project);
+        })
     }
 
     static dispNewProject(projectName) {
@@ -265,6 +273,15 @@ class displayController {
     static setProjectOption(projectName) {
         const addSelect = document.getElementById('project-exp');
         addSelect.value = projectName.toLowerCase();
+    }
+
+    static dispProjectList() {
+        const projects = store.getProjects();
+
+        projects.forEach((project, i) => {
+            displayController.addProjectToList(project);
+            displayController.setProjectId(i);
+        })
     }
 
     static displayProjectTasks(projectName, taskList) {
@@ -280,29 +297,79 @@ class displayController {
 
     static loadProjectAndTasks(projectName, taskList) {
         displayController.loadProject(projectName);
-        displayController.displayProjectTasks(projectName, taskList)
+        displayController.setProjectOption(projectName);
+        displayController.dispProjectList()
+        displayController.displayProjectTasks(projectName, taskList);
     }
 }
 
-function updateTaskInStore(index) {
-    const modalFields = displayController.getModalFields();
+class store {
+    static getProjects() {
+        let projectList;
+        if(localStorage.getItem('projectList') === null) {
+            projectList = [];
+        } else {
+            projectList = JSON.parse(localStorage.getItem('projectList'));
+        }
+    
+        return projectList;
+    }
 
-    taskItems[index].title = modalFields[0].value; 
-    taskItems[index].description = modalFields[1].value;
-    taskItems[index].dueDate = modalFields[2].value;
-    taskItems[index].priority = modalFields[3].value;
-    taskItems[index].project = modalFields[5].value;
-}
+    static addProject(project) {
+        const projectList = store.getProjects();
+        projectList.push(project);
+        localStorage.setItem('projectList', JSON.stringify(projectList));
+    }
 
-function removeTaskFromStore(index) {
-    taskItems.splice(index, 1);
+    static getTasks() {
+        let taskItems;
+        if(localStorage.getItem('taskItems') === null) {
+            taskItems = [];
+        } else {
+            taskItems = JSON.parse(localStorage.getItem('taskItems'));
+        }
+    
+        return taskItems;
+      }
+    
+    static addTask(task) {
+        const taskItems = store.getTasks();
+        taskItems.push(task);
+        localStorage.setItem('taskItems', JSON.stringify(taskItems));
+    }
+
+    static updateTaskInStore(index) {
+        const taskItems = store.getTasks();
+        const modalFields = displayController.getModalFields();
+    
+        taskItems[index].title = modalFields[0].value; 
+        taskItems[index].description = modalFields[1].value;
+        taskItems[index].dueDate = modalFields[2].value;
+        taskItems[index].priority = modalFields[3].value;
+        taskItems[index].project = modalFields[5].value;
+
+        localStorage.setItem('taskItems', JSON.stringify(taskItems));
+    }
+    
+    static removeTaskFromStore(index) {
+        const taskItems = store.getTasks();
+
+        taskItems.splice(index, 1);
+        localStorage.setItem('taskItems', JSON.stringify(taskItems));
+    }
+
 }
 
 window.addEventListener('load', () => {
-    displayController.loadProject();
+    const projectName = store.getProjects()[0];
+    const taskList = store.getTasks();
+    const projectList = store.getProjects();
+
     displayController.dispAddTask();
     displayController.dispAddProject();
-    displayController.loadProjectAndTasks();
+    displayController.loadProjectAndTasks(projectName, taskList);
+    displayController.addAllProjectsToOption(projectList);
+    displayController.setProjectOption(projectName);
 })
 
 document.querySelector('.add-task').addEventListener('click', () => {
@@ -325,7 +392,7 @@ document.querySelector('.project-btn-container').addEventListener('click', () =>
 
 document.getElementById('saveProject').addEventListener('click', () => { 
     const projectName = document.getElementById('projectName').value;
-    projectList.push(projectName);
+    store.addProject(projectName);
     displayController.addProjectToList(projectName);
     displayController.dispNewProject(projectName);
     displayController.addProjectToOption(projectName);
@@ -341,9 +408,10 @@ document.getElementById('save').addEventListener('click', () => {
     const check = '';
     const addSelect = document.getElementById('project-exp');
     const projectName = document.querySelector('.project-header').innerText;
+    const taskItems = store.getTasks();
 
     const newTask = new task(title, description, dueDate, priority, project, check);
-    taskItems.push(newTask);
+    store.addTask(newTask);
     displayController.addTaskToList(newTask);
     displayController.setTaskId(taskItems.length - 1);
     displayController.clearAddTaskFields();
@@ -353,8 +421,6 @@ document.getElementById('save').addEventListener('click', () => {
         displayController.dispNewProject(projectName)
         displayController.displayProjectTasks(projectName, taskItems)
     }
-    console.log(taskItems)
-
 })
 
 document.getElementById('project-content').addEventListener('click', (e) => {
@@ -370,7 +436,7 @@ document.getElementById('project-content').addEventListener('click', (e) => {
 document.getElementById('project-content').addEventListener('click', e => {
     if(e.target.classList.contains('delete-btn')) {
         const index = e.target.parentElement.parentElement.id;
-        removeTaskFromStore(index);
+        store.removeTaskFromStore(index);
         e.target.parentElement.parentElement.parentElement.remove();
     }
 })
@@ -380,8 +446,9 @@ document.getElementById('saveModal').addEventListener('click', e => {
     const index = modal.querySelector('#modalId').value;
     const modalSelect = document.getElementById('project');
     const projectName = document.querySelector('.project-header').innerText;
+    const taskItems = store.getTasks();
 
-    updateTaskInStore(index);
+    store.updateTaskInStore(index);
     displayController.updateTaskInUI(index);
     displayController.closeModal(modal);
 
@@ -403,6 +470,8 @@ document.getElementById('overlay').addEventListener('click', () => {
 })
 
 document.getElementById('project-content').addEventListener('change', e => {
+    const taskItems = store.getTasks();
+
     if(e.target.name === 'check') {
         const index = e.target.parentElement.nextElementSibling.id;
         const task = e.target.parentElement.parentElement;
@@ -420,12 +489,15 @@ document.getElementById('project-content').addEventListener('change', e => {
 
 document.getElementById('project-content').addEventListener('input', e => {
     if(e.target.name === 'duedate') {
+        const taskItems = store.getTasks();
         const index = e.target.parentElement.parentElement.id;
         taskItems[index].dueDate = e.target.value;
     }
 })
 
 document.querySelector('.project-list').addEventListener('click', e => {
+    const taskItems = store.getTasks();
+
     displayController.dispNewProject(e.target.innerText);
     displayController.setProjectOption(e.target.innerText);
     displayController.displayProjectTasks(e.target.innerText, taskItems);
