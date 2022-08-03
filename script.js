@@ -313,8 +313,7 @@ class displayController {
     }
 
     static displayProjectTasks(projectName, taskList) {
-        // const project = projectName.toLowerCase();
-        const project = projectName;
+        const project = projectName.toLowerCase();
 
         taskList.forEach((task, i) => {
             if(task.project === project) {
@@ -341,28 +340,10 @@ class displayController {
         previousProject.value = prevProject;
     }
 
-    // static toggleProjectSubmitBtn() {
-    //     const saveProject = document.getElementById('saveProject');
-    //     const saveEdit = document.getElementById('saveProjectEdit');
-
-    //     if(saveEdit.classList.contains('display-none')) {
-    //         saveEdit.classList.remove('display-none');
-    //         saveProject.classList.add('display-none');
-    //     }
-    //     else {
-    //         saveEdit.classList.add('display-none');
-    //         saveProject.classList.remove('display-none');
-    //     }
-    // }
-
     static toggleEditField(projectItem, projectEditField) {
         projectItem.classList.toggle('display-none');
         projectEditField.classList.toggle('display-none');    
     }
-
-    // static updateProject(origProject, editProject) {
-    //     origProject = editProject;
-    // }
 
     static updateProjectSelect(origProject, editProject) {
         const addSelect = document.getElementById('project-exp');
@@ -451,7 +432,7 @@ class store {
         let taskItems = store.getTasks();
 
         taskItems.forEach(task => {
-            if(task.project === origProject) task.project = editProject;
+            if(task.project === origProject.toLowerCase()) task.project = editProject.toLowerCase();
         })
 
         localStorage.setItem('taskItems', JSON.stringify(taskItems));
