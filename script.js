@@ -590,12 +590,11 @@ document.getElementById('project-content').addEventListener('click', e => {
     }
 })
 
-document.getElementById('saveModal').addEventListener('click', e => {
+document.getElementById('saveModal').addEventListener('click', () => {
     const modal = document.querySelector('#todo-modal');
     const index = modal.querySelector('#modalId').value;
     const modalSelect = document.getElementById('project');
     const projectName = document.querySelector('.project-header').innerText;
-    const taskItems = store.getTasks();
 
     store.updateTaskInStore(index);
     displayController.updateTaskInUI(index);
@@ -603,7 +602,7 @@ document.getElementById('saveModal').addEventListener('click', e => {
 
     if(modalSelect.value !== projectName.toLowerCase()) {
         displayController.dispNewProject(projectName)
-        displayController.displayProjectTasks(projectName, taskItems)
+        displayController.displayProjectTasks(projectName, store.getTasks())
     }
 })
 
