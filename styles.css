@@ -248,10 +248,6 @@ ul {
     font-size: 14px;
 }
 
-.display-none {
-  display: none;
-}
-
 .modal-footer {
     padding: 1.5rem;
     display: flex;
@@ -380,4 +376,8 @@ input[type='checkbox']:checked:after {
 
 .project-item p {
   cursor: pointer;
+}
+
+.display-none {
+  display: none;
 }
