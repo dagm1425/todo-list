@@ -80,12 +80,12 @@ class displayController {
         taskInfo.appendChild(taskDueDate);
 
         const editBtn = document.createElement('button');
-        editBtn.classList.add('edit-btn');
+        editBtn.classList.add('task-edit-btn');
         editBtn.innerText = 'Edit';
         taskInfo.appendChild(editBtn);
 
         const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('delete-btn');
+        deleteBtn.classList.add('task-delete-btn');
         deleteBtn.innerText = 'Delete';
         taskInfo.appendChild(deleteBtn);
         // const taskPriority = document.createElement('div');
@@ -191,15 +191,17 @@ class displayController {
     }
 
     static openModal(modal) {
-      if(modal == null) return;
-      modal.classList.add('active');
-      overlay.classList.add('active');
+        const overlay = document.getElementById('overlay');
+        if(modal == null) return;
+        modal.classList.add('active');
+        overlay.classList.add('active');
     }
     
     static closeModal(modal) {
-      if(modal == null) return;
-      modal.classList.remove('active');
-      overlay.classList.remove('active');
+        const overlay = document.getElementById('overlay');
+        if(modal == null) return;
+        modal.classList.remove('active');
+        overlay.classList.remove('active');
     }
 
     static clearAddTaskFields() {
@@ -230,21 +232,47 @@ class displayController {
 
     static addProjectToList(projectName) {
         const list = document.querySelector('.project-list');
-        const project = document.createElement('li');
-        
+        const projectContainer = document.createElement('li');
+        const projectItem = document.createElement('div');
+        const project = document.createElement('p');
+        const projectBtnContainer = document.createElement('div');
+        const projectEditBtn = document.createElement('button');
+        const projectDelBtn = document.createElement('button');
+        const projectEditField = document.createElement('input');
+            projectEditField.type = "text";
+            projectEditField.name = "projectEdit";
+            projectEditField.value = "(add class for this edit field)";
+            projectEditField.id = "projectEdit";
+
+        projectItem.classList.add('project-item');
         project.innerText = `${projectName}`;
-        list.appendChild(project);
+        projectEditBtn.classList.add('project-edit-btn');
+        projectEditBtn.innerText = 'Edit';
+        projectDelBtn.classList.add('project-del-btn')
+        projectDelBtn.innerText = 'Del';
+        projectEditField.classList.add('display-none', 'project-edit-field');
+
+        projectBtnContainer.appendChild(projectEditBtn);
+        projectBtnContainer.appendChild(projectDelBtn);
+
+        projectItem.appendChild(project);
+        projectItem.appendChild(projectBtnContainer);
+
+        projectContainer.appendChild(projectItem);
+        projectContainer.appendChild(projectEditField);
+
+        list.appendChild(projectContainer);
     }
 
-    static setProjectId(i) {
-        document.querySelector('.project-list').lastElementChild.setAttribute('id', i);
+    static setProjectId(index) {
+        document.querySelector('.project-list').lastElementChild.setAttribute('id', index);
     }
 
     static clearProjectField() {
         document.getElementById('projectName').value = '';
     }
 
-    static addProjectToOption(projectName) {
+    static addProjectToSelect(projectName) {
         const addSelect = document.getElementById('project-exp');
         const modalSelect = document.getElementById('project');
         const opt1 = document.createElement('option');
@@ -259,9 +287,9 @@ class displayController {
         modalSelect.add(opt2);
     }
 
-    static addAllProjectsToOption(projectList) {
-        projectList.forEach(project => {
-            displayController.addProjectToOption(project);
+    static addAllProjectsToSelect(projects) {
+        projects.forEach(project => {
+            displayController.addProjectToSelect(project);
         })
     }
 
@@ -270,12 +298,12 @@ class displayController {
         displayController.loadProject(projectName)
     }
 
-    static setProjectOption(projectName) {
+    static setProjectSelect(projectName) {
         const addSelect = document.getElementById('project-exp');
         addSelect.value = projectName.toLowerCase();
     }
 
-    static dispProjectList() {
+    static dispProjects() {
         const projects = store.getProjects();
 
         projects.forEach((project, i) => {
@@ -285,11 +313,12 @@ class displayController {
     }
 
     static displayProjectTasks(projectName, taskList) {
-        const project = projectName.toLowerCase();
+        // const project = projectName.toLowerCase();
+        const project = projectName;
 
         taskList.forEach((task, i) => {
             if(task.project === project) {
-                displayController.addTaskToList(taskList[i]);
+                displayController.addTaskToList(taskList[i]); 
                 displayController.setTaskId(i);
             }
         })
@@ -297,28 +326,95 @@ class displayController {
 
     static loadProjectAndTasks(projectName, taskList) {
         displayController.loadProject(projectName);
-        displayController.setProjectOption(projectName);
-        displayController.dispProjectList()
+        displayController.dispProjects()
         displayController.displayProjectTasks(projectName, taskList);
+    }
+
+    static populateAddProject(index, prevProject) {
+        const projects = store.getProjects();
+        const projectName = document.getElementById('projectName');
+        const projectId = document.getElementById('projectId');
+        const previousProject = document.getElementById('prevProject')
+
+        projectName.value = projects[index];
+        projectId.value = index;
+        previousProject.value = prevProject;
+    }
+
+    // static toggleProjectSubmitBtn() {
+    //     const saveProject = document.getElementById('saveProject');
+    //     const saveEdit = document.getElementById('saveProjectEdit');
+
+    //     if(saveEdit.classList.contains('display-none')) {
+    //         saveEdit.classList.remove('display-none');
+    //         saveProject.classList.add('display-none');
+    //     }
+    //     else {
+    //         saveEdit.classList.add('display-none');
+    //         saveProject.classList.remove('display-none');
+    //     }
+    // }
+
+    static toggleEditField(projectItem, projectEditField) {
+        projectItem.classList.toggle('display-none');
+        projectEditField.classList.toggle('display-none');    
+    }
+
+    // static updateProject(origProject, editProject) {
+    //     origProject = editProject;
+    // }
+
+    static updateProjectSelect(origProject, editProject) {
+        const addSelect = document.getElementById('project-exp');
+        const modalSelect = document.getElementById('project');
+
+        for( let i = 0; i < addSelect.length; i++) {
+            if(addSelect.options[i].text === origProject) {
+                addSelect.options[i].text = editProject;
+                addSelect.options[i].value = editProject.toLowerCase();
+            }
+        }
+
+        for( let i = 0; i < modalSelect.length; i++) {
+            if(modalSelect.options[i].text === origProject) {
+                modalSelect.options[i].text = editProject;
+                modalSelect.options[i].value = editProject.toLowerCase();
+            }
+        }
+
     }
 }
 
 class store {
     static getProjects() {
-        let projectList;
-        if(localStorage.getItem('projectList') === null) {
-            projectList = [];
+        let projects;
+        if(localStorage.getItem('projects') === null) {
+            projects = ['myProject'];
         } else {
-            projectList = JSON.parse(localStorage.getItem('projectList'));
+            projects = JSON.parse(localStorage.getItem('projects'));
         }
     
-        return projectList;
+        return projects;
     }
 
     static addProject(project) {
-        const projectList = store.getProjects();
-        projectList.push(project);
-        localStorage.setItem('projectList', JSON.stringify(projectList));
+        let projects = store.getProjects();
+        projects.push(project);
+        localStorage.setItem('projects', JSON.stringify(projects));
+    }
+
+    static updateProject(projectEdit, index) {
+        let projects = store.getProjects();
+
+        projects[index] = projectEdit;
+        localStorage.setItem('projects', JSON.stringify(projects));
+    }
+
+    static removeProject(index) {
+        let projects = store.getProjects();
+
+        projects.splice(index, 1);
+        localStorage.setItem('projects', JSON.stringify(projects));
     }
 
     static getTasks() {
@@ -333,13 +429,13 @@ class store {
       }
     
     static addTask(task) {
-        const taskItems = store.getTasks();
+        let taskItems = store.getTasks();
         taskItems.push(task);
         localStorage.setItem('taskItems', JSON.stringify(taskItems));
     }
 
     static updateTaskInStore(index) {
-        const taskItems = store.getTasks();
+        let taskItems = store.getTasks();
         const modalFields = displayController.getModalFields();
     
         taskItems[index].title = modalFields[0].value; 
@@ -351,15 +447,25 @@ class store {
         localStorage.setItem('taskItems', JSON.stringify(taskItems));
     }
     
+    static updateProjectinTasks(origProject, editProject) {
+        let taskItems = store.getTasks();
+
+        taskItems.forEach(task => {
+            if(task.project === origProject) task.project = editProject;
+        })
+
+        localStorage.setItem('taskItems', JSON.stringify(taskItems));
+    }
+
     static removeTaskFromStore(index) {
-        const taskItems = store.getTasks();
+        let taskItems = store.getTasks();
 
         taskItems.splice(index, 1);
         localStorage.setItem('taskItems', JSON.stringify(taskItems));
     }
 
     static updateDueDate(index, date) {
-        const taskItems = store.getTasks();
+        let taskItems = store.getTasks();
 
         taskItems[index].dueDate = date;
         localStorage.setItem('taskItems', JSON.stringify(taskItems));
@@ -367,15 +473,15 @@ class store {
 }
 
 window.addEventListener('load', () => {
+    const projects = store.getProjects();
     const projectName = store.getProjects()[0];
     const taskList = store.getTasks();
-    const projectList = store.getProjects();
 
     displayController.dispAddTask();
     displayController.dispAddProject();
     displayController.loadProjectAndTasks(projectName, taskList);
-    displayController.addAllProjectsToOption(projectList);
-    displayController.setProjectOption(projectName);
+    displayController.addAllProjectsToSelect(projects);
+    displayController.setProjectSelect(projectName);
 })
 
 document.querySelector('.add-task').addEventListener('click', () => {
@@ -388,7 +494,7 @@ document.querySelector('.btn-container-exp').addEventListener('click', () => {
 })
 
 document.querySelector('.add-project').addEventListener('click', () => {
-    displayController.dispAddProjectExp()
+    displayController.dispAddProjectExp();
 })
 
 document.querySelector('.project-btn-container').addEventListener('click', () => {
@@ -401,8 +507,65 @@ document.getElementById('saveProject').addEventListener('click', () => {
     store.addProject(projectName);
     displayController.addProjectToList(projectName);
     displayController.dispNewProject(projectName);
-    displayController.addProjectToOption(projectName);
-    displayController.setProjectOption(projectName);
+    displayController.addProjectToSelect(projectName);
+    displayController.setProjectSelect(projectName);
+})
+
+document.getElementById('project-content').addEventListener('input', e => {
+    if(e.target.name === 'duedate') {
+        const index = e.target.parentElement.parentElement.id;
+        store.updateDueDate(index, e.target.value);
+    }
+})
+
+document.querySelector('.project-list').addEventListener('click', e => {
+    if(e.target.tagName === 'P') {
+        const taskItems = store.getTasks();
+
+        displayController.dispNewProject(e.target.innerText);
+        displayController.displayProjectTasks(e.target.innerText, taskItems);
+        displayController.setProjectSelect(e.target.innerText);
+    }
+})
+
+document.querySelector('.project-list').addEventListener('click', e => {
+    if(e.target.classList.contains('project-del-btn')) {
+        e.target.parentElement.parentElement.remove();
+        store.removeProject(e.target.parentElement.parentElement.id);
+    }
+})
+
+document.querySelector('.project-list').addEventListener('click', e => {
+    if(e.target.classList.contains('project-edit-btn')) {
+        const projectItem = e.target.parentElement.parentElement;
+        const projectEditField = e.target.parentElement.parentElement.nextElementSibling;
+
+        displayController.toggleEditField(projectItem, projectEditField);
+        projectEditField.value = projectItem.firstElementChild.innerText;
+        projectEditField.focus();
+    }
+})
+
+document.querySelector('.project-list').addEventListener('focusout', e => {
+    if(e.target.tagName === 'INPUT') {
+        const projectItem = e.target.previousElementSibling;
+        const projectEditField = e.target;
+        const origProject = projectItem.firstElementChild.innerText;
+        const editProject = projectEditField.value;
+        const index = projectEditField.parentElement.id;
+
+        if(origProject !== editProject) {
+            store.updateProject(editProject, index);
+            projectItem.firstElementChild.innerText = projectEditField.value;
+            store.updateProjectinTasks(origProject, editProject);
+            displayController.dispNewProject(editProject);
+            displayController.displayProjectTasks(editProject, store.getTasks());
+            displayController.updateProjectSelect(origProject, editProject);
+            displayController.setProjectSelect(editProject);
+        }
+
+        displayController.toggleEditField(projectItem, projectEditField);
+    }
 })
 
 document.getElementById('save').addEventListener('click', () => {
@@ -430,7 +593,7 @@ document.getElementById('save').addEventListener('click', () => {
 })
 
 document.getElementById('project-content').addEventListener('click', (e) => {
-    if(e.target.classList.contains('edit-btn')) {
+    if(e.target.classList.contains('task-edit-btn')) {
         const modal = document.getElementById('todo-modal');
         const i = e.target.parentElement.parentElement.id;
 
@@ -440,7 +603,7 @@ document.getElementById('project-content').addEventListener('click', (e) => {
 })
 
 document.getElementById('project-content').addEventListener('click', e => {
-    if(e.target.classList.contains('delete-btn')) {
+    if(e.target.classList.contains('task-delete-btn')) {
         const index = e.target.parentElement.parentElement.id;
         store.removeTaskFromStore(index);
         e.target.parentElement.parentElement.parentElement.remove();
@@ -486,25 +649,10 @@ document.getElementById('project-content').addEventListener('change', e => {
             task.classList.add('checked');
             taskItems[index].check = 'checked';
         }
-        else if(task.classList.contains('checked')) {
+        else if(task.classList.contains('checked')) {     
             task.classList.remove('checked');
             taskItems[index].check = 'not checked';
         }
     }
-})
-
-document.getElementById('project-content').addEventListener('input', e => {
-    if(e.target.name === 'duedate') {
-        const index = e.target.parentElement.parentElement.id;
-        store.updateDueDate(index, e.target.value);
-    }
-})
-
-document.querySelector('.project-list').addEventListener('click', e => {
-    const taskItems = store.getTasks();
-
-    displayController.dispNewProject(e.target.innerText);
-    displayController.setProjectOption(e.target.innerText);
-    displayController.displayProjectTasks(e.target.innerText, taskItems);
 })
 
