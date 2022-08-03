@@ -171,7 +171,7 @@ class displayController {
     static populateModal(index) {
         const modalFields = displayController.getModalFields();
         const taskItems = store.getTasks();
-
+        // console.log(index)
         modalFields[0].value = taskItems[index].title;
         modalFields[1].value = taskItems[index].description;
         modalFields[2].value = taskItems[index].dueDate;
@@ -241,7 +241,7 @@ class displayController {
         const projectEditField = document.createElement('input');
             projectEditField.type = "text";
             projectEditField.name = "projectEdit";
-            projectEditField.value = "(add class for this edit field)";
+            projectEditField.value = "";
             projectEditField.id = "projectEdit";
 
         projectItem.classList.add('project-item');
@@ -558,18 +558,17 @@ document.getElementById('save').addEventListener('click', () => {
     const check = '';
     const addSelect = document.getElementById('project-exp');
     const projectName = document.querySelector('.project-header').innerText;
-    const taskItems = store.getTasks();
 
     const newTask = new task(title, description, dueDate, priority, project, check);
     store.addTask(newTask);
     displayController.addTaskToList(newTask);
-    displayController.setTaskId(taskItems.length - 1);
+    displayController.setTaskId(store.getTasks().length - 1);
     displayController.clearAddTaskFields();
     // displayController.colorPriority(priority, setTaskId());  
 
     if(addSelect.value !== projectName.toLowerCase()) {
         displayController.dispNewProject(projectName)
-        displayController.displayProjectTasks(projectName, taskItems)
+        displayController.displayProjectTasks(projectName, store.getTasks())
     }
 })
 
