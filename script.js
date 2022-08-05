@@ -79,14 +79,12 @@ class displayController {
         taskDueDate.classList.add('input-fields');
         taskInfo.appendChild(taskDueDate);
 
-        const editBtn = document.createElement('button');
-        editBtn.classList.add('task-edit-btn');
-        editBtn.innerText = 'Edit';
+        const editBtn = document.createElement('a');
+        editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-lg task-edit-btn"></i>'; 
         taskInfo.appendChild(editBtn);
 
-        const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('task-delete-btn');
-        deleteBtn.innerText = 'Delete';
+        const deleteBtn = document.createElement('a');
+        deleteBtn.innerHTML = '<i class="fa-regular fa-trash-can fa-lg task-delete-btn"></i>';
         taskInfo.appendChild(deleteBtn);
         // const taskPriority = document.createElement('div');
         // taskPriority.innerText = `${taskItem.priority}`;
@@ -103,8 +101,6 @@ class displayController {
 
     static setTaskId(index) {
         document.querySelector('.tasks-ul').firstElementChild.firstElementChild.lastElementChild.setAttribute('id', `${index}`);
-
-        // return `${taskItems.length - 1}`;
     }
 
     static colorPriority(priority, id) {
@@ -171,7 +167,7 @@ class displayController {
     static populateModal(index) {
         const modalFields = displayController.getModalFields();
         const taskItems = store.getTasks();
-        // console.log(index)
+
         modalFields[0].value = taskItems[index].title;
         modalFields[1].value = taskItems[index].description;
         modalFields[2].value = taskItems[index].dueDate;
@@ -236,8 +232,8 @@ class displayController {
         const projectItem = document.createElement('div');
         const project = document.createElement('p');
         const projectBtnContainer = document.createElement('div');
-        const projectEditBtn = document.createElement('button');
-        const projectDelBtn = document.createElement('button');
+        const projectEditBtn = document.createElement('a');
+        const projectDelBtn = document.createElement('a');
         const projectEditField = document.createElement('input');
             projectEditField.type = "text";
             projectEditField.name = "projectEdit";
@@ -246,10 +242,8 @@ class displayController {
 
         projectItem.classList.add('project-item');
         project.innerText = `${projectName}`;
-        projectEditBtn.classList.add('project-edit-btn');
-        projectEditBtn.innerText = 'Edit';
-        projectDelBtn.classList.add('project-del-btn')
-        projectDelBtn.innerText = 'Del';
+        projectEditBtn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm project-edit-btn"></i>';
+        projectDelBtn.innerHTML = '<i class="fa-regular fa-trash-can fa-sm project-del-btn"></i>';
         projectEditField.classList.add('display-none', 'project-edit-field');
 
         projectBtnContainer.appendChild(projectEditBtn);
@@ -518,8 +512,8 @@ document.querySelector('.project-list').addEventListener('click', e => {
 
 document.querySelector('.project-list').addEventListener('click', e => {
     if(e.target.classList.contains('project-edit-btn')) {
-        const projectItem = e.target.parentElement.parentElement;
-        const projectEditField = e.target.parentElement.parentElement.nextElementSibling;
+        const projectItem = e.target.parentElement.parentElement.parentElement;
+        const projectEditField = e.target.parentElement.parentElement.parentElement.nextElementSibling;
 
         displayController.toggleEditField(projectItem, projectEditField);
         projectEditField.value = projectItem.firstElementChild.innerText;
@@ -575,7 +569,7 @@ document.getElementById('save').addEventListener('click', () => {
 document.getElementById('project-content').addEventListener('click', (e) => {
     if(e.target.classList.contains('task-edit-btn')) {
         const modal = document.getElementById('todo-modal');
-        const i = e.target.parentElement.parentElement.id;
+        const i = e.target.parentElement.parentElement.parentElement.id;
 
         displayController.populateModal(i); 
         displayController.openModal(modal);
@@ -584,9 +578,9 @@ document.getElementById('project-content').addEventListener('click', (e) => {
 
 document.getElementById('project-content').addEventListener('click', e => {
     if(e.target.classList.contains('task-delete-btn')) {
-        const index = e.target.parentElement.parentElement.id;
+        const index = e.target.parentElement.parentElement.parentElement.id;
         store.removeTaskFromStore(index);
-        e.target.parentElement.parentElement.parentElement.remove();
+        e.target.parentElement.parentElement.parentElement.parentElement.remove();
     }
 })
 
