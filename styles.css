@@ -120,6 +120,12 @@ body {
   margin: 0.75rem 0 0 0.75rem;
 }
 
+.project-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 3.5rem 0 1.5rem;
+}
+
 ul {
   list-style-type: none;
 }
