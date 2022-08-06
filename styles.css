@@ -402,8 +402,12 @@ input[type='checkbox']:checked:after {
   justify-content: space-between;
 }
 
-.project-item p {
+.project-name {
   cursor: pointer;
+}
+
+.project-name.active {
+  font-weight: bold;
 }
 
 .project-item i {
