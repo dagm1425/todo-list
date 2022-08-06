@@ -241,6 +241,7 @@ class displayController {
             projectEditField.id = "projectEdit";
 
         projectItem.classList.add('project-item');
+        project.classList.add('project-name');
         project.innerText = `${projectName}`;
         projectEditBtn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm project-edit-btn"></i>';
         projectDelBtn.innerHTML = '<i class="fa-regular fa-trash-can fa-sm project-del-btn"></i>';
@@ -279,6 +280,15 @@ class displayController {
 
         addSelect.add(opt1);
         modalSelect.add(opt2);
+    }
+
+    static setActiveProject(project) {
+        project.classList.add('active');
+
+        document.querySelectorAll('.project-name.active').forEach(p => {
+            if(p === project) return;
+            p.classList.remove('active')
+        });
     }
 
     static addAllProjectsToSelect(projects) {
@@ -455,6 +465,7 @@ window.addEventListener('load', () => {
     displayController.dispAddTask();
     displayController.dispAddProject();
     displayController.loadProjectAndTasks(projectName, taskList);
+    displayController.setActiveProject(document.querySelectorAll('.project-name')[0]);
     displayController.addAllProjectsToSelect(projects);
     displayController.setProjectSelect(projectName);
 })
@@ -498,6 +509,7 @@ document.querySelector('.project-list').addEventListener('click', e => {
         const taskItems = store.getTasks();
 
         displayController.dispNewProject(e.target.innerText);
+        displayController.setActiveProject(e.target);
         displayController.displayProjectTasks(e.target.innerText, taskItems);
         displayController.setProjectSelect(e.target.innerText);
     }
