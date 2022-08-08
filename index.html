@@ -14,62 +14,62 @@
         <h3>Todo List</h3>
     </div>
 
-    <section id="main"></div>
-        <div id="project-content">
-          <div class="add-task">
-              <button class="add-task-btn">+</button>
-              <a href="#" class="add-task-link">Add task</a>
-          </div>
-          <div class="add-task-exp">
-              <div class="input-area-exp">
-                <div class="text-input-exp">
-                    <input type="text" id="title-exp" name="title-exp" class="input-fields task-title-exp" placeholder="Title"><br>
-                    <textarea id="description-exp" name="description-exp" class="input-fields task-description-exp" placeholder="Description" rows="3"></textarea><br>
+    <div class="content-container">
+        <section id="main">
+            <div id="project-content">
+                <div class="add-task">
+                    <button class="add-task-btn">+</button>
+                    <a href="#" class="add-task-link">Add task</a>
                 </div>
-                <div class="task-settings-exp">
-                    <div class="settings-exp">
-                        <input type="date" id="dueDate-exp" name="dueDate-exp" class="input-fields">
-                    </div> 
-                    <div class="settings-exp">
-                        <select name="priority" id="priority-exp" class="input-fields">
-                            <option hidden disabled selected value>Priority</option>
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>                   
-                        </select>
-                    </div>     
-                    <div class="settings-exp">
-                        <select name="project" id="project-exp" class="input-fields">
-                            <option hidden disabled selected value>Project</option>
-                            <option value="office">Office</option>
-                            <option value="groceries">Groceries</option>
-                        </select>
+                <div class="add-task-exp">
+                    <div class="input-area-exp">
+                        <div class="text-input-exp">
+                            <input type="text" id="title-exp" name="title-exp" class="input-fields task-title-exp" placeholder="Title"><br>
+                            <textarea id="description-exp" name="description-exp" class="input-fields task-description-exp" placeholder="Description" rows="3"></textarea><br>
+                        </div>
+                        <div class="task-settings-exp">
+                            <div class="settings-exp">
+                                <input type="date" id="dueDate-exp" name="dueDate-exp" class="input-fields">
+                            </div> 
+                            <div class="settings-exp">
+                                <select name="priority" id="priority-exp" class="input-fields">
+                                    <option hidden disabled selected value>Priority</option>
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>                   
+                                </select>
+                            </div>     
+                            <div class="settings-exp">
+                                <select name="project" id="project-exp" class="input-fields">
+                                    <option hidden disabled selected value>Project</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-container-exp">
+                        <button class="btn">Cancel</button>
+                        <button type="submit" class="btn" id="save">Save</button>
                     </div>
                 </div>
-              </div>
-              <div class="btn-container-exp">
-                  <button class="btn">Cancel</button>
-                  <button type="submit" class="btn" id="save">Save</button>
-              </div>
-          </div>
-        </div>
-    </section>
-    <section id="side-bar">
-        <h3>Projects</h3>
-        <div class="projects">
-            <ul class="project-list"></ul>
-        </div>
-        <div class="add-project">
-            <a href="#" class="add-project-link"><span>+</span>Add project</a>
-        </div>
-        <div class="add-project-exp">
-            <input type="text" id="projectName" name="project-exp" class="input-fields project-title-exp" placeholder="Project name"><br>
-            <div class="project-btn-container">
-                <button class="cancel-project">Cancel</button>
-                <button type="submit" class="save-project" id="saveProject">Save</button>
             </div>
-        </div>
-    </section>
+        </section>
+        <section id="side-bar">
+            <h3>Projects</h3>
+            <div class="projects">
+                <ul class="project-list"></ul>
+            </div>
+            <div class="add-project">
+                <a href="#" class="add-project-link"><span>+</span>Add project</a>
+            </div>
+            <div class="add-project-exp">
+                <input type="text" id="projectName" name="project-exp" class="input-fields project-title-exp" placeholder="Project name"><br>
+                <div class="project-btn-container">
+                    <button class="cancel-project">Cancel</button>
+                    <button type="submit" class="save-project" id="saveProject">Save</button>
+                </div>
+            </div>
+        </section>
+    </div>
     
     <div id="todo-modal">
         <div class="modal-header">
@@ -99,8 +99,6 @@
                     <label for="project">Project</label>
                     <select name="project" id="project" class="input-fields">
                         <option hidden disabled selected value> - Select - </option>
-                        <option value="office">Office</option>
-                        <option value="groceries">Groceries</option>
                     </select>
                 </div>
                 <div class="settings">
