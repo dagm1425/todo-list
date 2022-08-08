@@ -9,7 +9,7 @@ class task {
     } 
 }
 
-class displayController {
+class UI {
     static loadProject(projectName) {
         const projectContent = document.getElementById('project-content');
 
@@ -29,9 +29,8 @@ class displayController {
         tasksView.appendChild(tasksList);
 
         projectView.appendChild(tasksView);
-        projectContent.insertBefore(projectView, projectContent.firstElementChild);
-
-        // displayController.addTaskToList(taskItems); << displayProjectTasks() should be here
+        projectContent.insertBefore(projectView, projectContent.firstElementChild);        
+          // UI.addTaskToList(taskItems); << displayProjectTasks() should be here
     }
 
     static addTaskToList(taskItem) {
@@ -165,7 +164,7 @@ class displayController {
     }
 
     static populateModal(index) {
-        const modalFields = displayController.getModalFields();
+        const modalFields = UI.getModalFields();
         const taskItems = store.getTasks();
 
         modalFields[0].value = taskItems[index].title;
@@ -183,7 +182,7 @@ class displayController {
         task.firstElementChild.firstElementChild.innerText = taskItems[index].title;
         task.firstElementChild.lastElementChild.innerText = taskItems[index].description;
         task.lastElementChild.children[0].value = taskItems[index].dueDate;
-        displayController.colorPriority(`${taskItems[index].priority}`, index);        
+        UI.colorPriority(`${taskItems[index].priority}`, index);        
     }
 
     static openModal(modal) {
@@ -215,7 +214,7 @@ class displayController {
     }
 
     static clearModalFields() {
-        const modalFields = displayController.getModalFields();
+        const modalFields = UI.getModalFields();
         const project = document.getElementById('project');
         const priority = document.getElementById('priority');
         
@@ -293,13 +292,13 @@ class displayController {
 
     static addAllProjectsToSelect(projects) {
         projects.forEach(project => {
-            displayController.addProjectToSelect(project);
+            UI.addProjectToSelect(project);
         })
     }
 
     static dispNewProject(projectName) {
         document.querySelector('.project-view').remove();
-        displayController.loadProject(projectName)
+        UI.loadProject(projectName)
     }
 
     static setProjectSelect(projectName) {
@@ -311,8 +310,8 @@ class displayController {
         const projects = store.getProjects();
 
         projects.forEach((project, i) => {
-            displayController.addProjectToList(project);
-            displayController.setProjectId(i);
+            UI.addProjectToList(project);
+            UI.setProjectId(i);
         })
     }
 
@@ -321,16 +320,16 @@ class displayController {
 
         taskList.forEach((task, i) => {
             if(task.project === project) {
-                displayController.addTaskToList(taskList[i]); 
-                displayController.setTaskId(i);
+                UI.addTaskToList(taskList[i]); 
+                UI.setTaskId(i);
             }
         })
     }
 
     static loadProjectAndTasks(projectName, taskList) {
-        displayController.loadProject(projectName);
-        displayController.dispProjects()
-        displayController.displayProjectTasks(projectName, taskList);
+        UI.loadProject(projectName);
+        UI.dispProjects()
+        UI.displayProjectTasks(projectName, taskList);
     }
 
     static populateAddProject(index, prevProject) {
@@ -421,7 +420,7 @@ class store {
 
     static updateTaskInStore(index) {
         let taskItems = store.getTasks();
-        const modalFields = displayController.getModalFields();
+        const modalFields = UI.getModalFields();
     
         taskItems[index].title = modalFields[0].value; 
         taskItems[index].description = modalFields[1].value;
@@ -462,39 +461,39 @@ window.addEventListener('load', () => {
     const projectName = store.getProjects()[0];
     const taskList = store.getTasks();
 
-    displayController.dispAddTask();
-    displayController.dispAddProject();
-    displayController.loadProjectAndTasks(projectName, taskList);
-    displayController.setActiveProject(document.querySelectorAll('.project-name')[0]);
-    displayController.addAllProjectsToSelect(projects);
-    displayController.setProjectSelect(projectName);
+    UI.dispAddTask();
+    UI.dispAddProject();
+    UI.loadProjectAndTasks(projectName, taskList);
+    UI.setActiveProject(document.querySelectorAll('.project-name')[0]);
+    UI.addAllProjectsToSelect(projects);
+    UI.setProjectSelect(projectName);
 })
 
 document.querySelector('.add-task').addEventListener('click', () => {
-    displayController.dispAddTaskExp()
+    UI.dispAddTaskExp()
 })
 
 document.querySelector('.btn-container-exp').addEventListener('click', () => {
-    displayController.clearAddTaskFields();
-    displayController.dispAddTask();
+    UI.clearAddTaskFields();
+    UI.dispAddTask();
 })
 
 document.querySelector('.add-project').addEventListener('click', () => {
-    displayController.dispAddProjectExp();
+    UI.dispAddProjectExp();
 })
 
 document.querySelector('.project-btn-container').addEventListener('click', () => {
-    displayController.dispAddProject();
-    displayController.clearProjectField();
+    UI.dispAddProject();
+    UI.clearProjectField();
 })
 
 document.getElementById('saveProject').addEventListener('click', () => { 
     const projectName = document.getElementById('projectName').value;
     store.addProject(projectName);
-    displayController.addProjectToList(projectName);
-    displayController.dispNewProject(projectName);
-    displayController.addProjectToSelect(projectName);
-    displayController.setProjectSelect(projectName);
+    UI.addProjectToList(projectName);
+    UI.dispNewProject(projectName);
+    UI.addProjectToSelect(projectName);
+    UI.setProjectSelect(projectName);
 })
 
 document.getElementById('project-content').addEventListener('input', e => {
@@ -508,10 +507,10 @@ document.querySelector('.project-list').addEventListener('click', e => {
     if(e.target.tagName === 'P') {
         const taskItems = store.getTasks();
 
-        displayController.dispNewProject(e.target.innerText);
-        displayController.setActiveProject(e.target);
-        displayController.displayProjectTasks(e.target.innerText, taskItems);
-        displayController.setProjectSelect(e.target.innerText);
+        UI.dispNewProject(e.target.innerText);
+        UI.setActiveProject(e.target);
+        UI.displayProjectTasks(e.target.innerText, taskItems);
+        UI.setProjectSelect(e.target.innerText);
     }
 })
 
@@ -527,7 +526,7 @@ document.querySelector('.project-list').addEventListener('click', e => {
         const projectItem = e.target.parentElement.parentElement.parentElement;
         const projectEditField = e.target.parentElement.parentElement.parentElement.nextElementSibling;
 
-        displayController.toggleEditField(projectItem, projectEditField);
+        UI.toggleEditField(projectItem, projectEditField);
         projectEditField.value = projectItem.firstElementChild.innerText;
         projectEditField.focus();
     }
@@ -545,13 +544,13 @@ document.querySelector('.project-list').addEventListener('focusout', e => {
             store.updateProject(editProject, index);
             projectItem.firstElementChild.innerText = projectEditField.value;
             store.updateProjectinTasks(origProject, editProject);
-            displayController.dispNewProject(editProject);
-            displayController.displayProjectTasks(editProject, store.getTasks());
-            displayController.updateProjectSelect(origProject, editProject);
-            displayController.setProjectSelect(editProject);
+            UI.dispNewProject(editProject);
+            UI.displayProjectTasks(editProject, store.getTasks());
+            UI.updateProjectSelect(origProject, editProject);
+            UI.setProjectSelect(editProject);
         }
 
-        displayController.toggleEditField(projectItem, projectEditField);
+        UI.toggleEditField(projectItem, projectEditField);
     }
 })
 
@@ -567,14 +566,14 @@ document.getElementById('save').addEventListener('click', () => {
 
     const newTask = new task(title, description, dueDate, priority, project, check);
     store.addTask(newTask);
-    displayController.addTaskToList(newTask);
-    displayController.setTaskId(store.getTasks().length - 1);
-    displayController.clearAddTaskFields();
-    // displayController.colorPriority(priority, setTaskId());  
+    UI.addTaskToList(newTask);
+    UI.setTaskId(store.getTasks().length - 1);
+    UI.clearAddTaskFields();
+    // UI.colorPriority(priority, setTaskId());  
 
     if(addSelect.value !== projectName.toLowerCase()) {
-        displayController.dispNewProject(projectName)
-        displayController.displayProjectTasks(projectName, store.getTasks())
+        UI.dispNewProject(projectName)
+        UI.displayProjectTasks(projectName, store.getTasks())
     }
 })
 
@@ -583,8 +582,8 @@ document.getElementById('project-content').addEventListener('click', (e) => {
         const modal = document.getElementById('todo-modal');
         const i = e.target.parentElement.parentElement.parentElement.id;
 
-        displayController.populateModal(i); 
-        displayController.openModal(modal);
+        UI.populateModal(i); 
+        UI.openModal(modal);
     }
 })
 
@@ -603,24 +602,24 @@ document.getElementById('saveModal').addEventListener('click', () => {
     const projectName = document.querySelector('.project-header').innerText;
 
     store.updateTaskInStore(index);
-    displayController.updateTaskInUI(index);
-    displayController.closeModal(modal);
+    UI.updateTaskInUI(index);
+    UI.closeModal(modal);
 
     if(modalSelect.value !== projectName.toLowerCase()) {
-        displayController.dispNewProject(projectName)
-        displayController.displayProjectTasks(projectName, store.getTasks())
+        UI.dispNewProject(projectName)
+        UI.displayProjectTasks(projectName, store.getTasks())
     }
 })
 
 document.getElementsByClassName('btn close')[0].addEventListener('click', (event) => {
     event.preventDefault();
     const modal = document.querySelector('#todo-modal.active'); 
-    displayController.closeModal(modal);
+    UI.closeModal(modal);
 })
 
 document.getElementById('overlay').addEventListener('click', () => {
     const modal = document.querySelector('#todo-modal.active'); 
-    displayController.closeModal(modal);
+    UI.closeModal(modal);
 })
 
 document.getElementById('project-content').addEventListener('change', e => {
